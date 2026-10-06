@@ -1,0 +1,380 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Simplicity Systems | Modular Suite">
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-badge">
+      <span class="hero-spark">✦</span>
+      <span>Simplicity Systems • Arquitectura Modular</span>
+    </div>
+    
+    <h1 class="hero-title">
+      Herramientas operativas diseñadas para <span class="gradient-text">escalar y simplificar</span> la gestión hotelera.
+    </h1>
+    
+    <p class="hero-description">
+      Módulos independientes de alto rendimiento desarrollados con <strong>Astro</strong>, <strong>React</strong> y servicios serverless en la nube. Explora las herramientas activas a continuación.
+    </p>
+  </section>
+
+  <!-- MODULE CARDS GRID -->
+  <section class="modules-grid">
+    
+    <!-- CARD 1: VOUCHERS -->
+    <a href="/vouchers" class="module-card card-vouchers">
+      <div class="card-gradient"></div>
+      <div class="card-content">
+        <div class="card-header-badge">
+          <span class="badge-icon">🎫</span>
+          <span class="badge-status">Activo • Client-Side PDF</span>
+        </div>
+        
+        <h2 class="card-title">Generador Dinámico de Vouchers</h2>
+        <p class="card-desc">
+          Motor de creación de comprobantes de estadía con vista previa interactiva en tiempo real y renderizado vectorial de documentos PDF descargables sin dependencia de servidores.
+        </p>
+
+        <div class="features-list">
+          <div class="feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Preview reactivo con <code>@react-pdf/renderer</code></span>
+          </div>
+          <div class="feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Cálculo automático de saldos y anticipos</span>
+          </div>
+          <div class="feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Descarga inmediata con formato A4 oficial</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <span class="btn-card">
+            Abrir Generador
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+          <span class="tech-tag">React 19 + Vite</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 2: RESERVAS -->
+    <a href="/reservas" class="module-card card-reservas">
+      <div class="card-gradient"></div>
+      <div class="card-content">
+        <div class="card-header-badge">
+          <span class="badge-icon">📅</span>
+          <span class="badge-status status-emerald">Activo • Google Sheets API</span>
+        </div>
+        
+        <h2 class="card-title">Motor de Carga de Reservas</h2>
+        <p class="card-desc">
+          Formulario modular de carga rápida y validación inteligente para recepción, conectado directamente con planillas de Google Sheets mediante webhooks de Google Apps Script.
+        </p>
+
+        <div class="features-list">
+          <div class="feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Validación de rango de fechas y capacidad</span>
+          </div>
+          <div class="feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Webhook asíncrono hacia Google Apps Script</span>
+          </div>
+          <div class="feature-item">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Notificaciones toast y modo simulación/demo</span>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <span class="btn-card btn-emerald">
+            Abrir Módulo de Reservas
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
+          <span class="tech-tag">Apps Script + REST</span>
+        </div>
+      </div>
+    </a>
+
+  </section>
+
+  <!-- TECH STACK INFO BANNER -->
+  <section class="tech-banner">
+    <div class="tech-banner-inner">
+      <div class="tech-banner-title">
+        <h3>Stack de Tecnologías & Arquitectura</h3>
+        <p>Construido con foco en bajo acoplamiento, alta portabilidad y cero costo de infraestructura fija.</p>
+      </div>
+      <div class="stack-badges">
+        <span class="stack-pill">Astro 5 SSR/SSG</span>
+        <span class="stack-pill">React 19</span>
+        <span class="stack-pill">React-PDF Engine</span>
+        <span class="stack-pill">Google Sheets REST Webhook</span>
+        <span class="stack-pill">TypeScript Ready</span>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-section {
+    text-align: center;
+    max-width: 860px;
+    margin: 2rem auto 3.5rem;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    color: #a5b4fc;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-spark {
+    color: #818cf8;
+  }
+
+  .hero-title {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #818cf8 0%, #38bdf8 50%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-description {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .hero-description strong {
+    color: #ffffff;
+  }
+
+  /* Modules Grid */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .module-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 2.25rem;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .module-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-active);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6366f1, #06b6d4);
+  }
+
+  .card-reservas .card-gradient {
+    background: linear-gradient(90deg, #10b981, #06b6d4);
+  }
+
+  .card-header-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .badge-icon {
+    font-size: 1.3rem;
+  }
+
+  .badge-status {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+
+  .badge-status.status-emerald {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+  }
+
+  .card-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+  }
+
+  .features-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #e5e7eb;
+  }
+
+  .feature-item svg {
+    color: #818cf8;
+    flex-shrink: 0;
+  }
+
+  .card-reservas .feature-item svg {
+    color: #34d399;
+  }
+
+  .feature-item code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #93c5fd;
+    font-family: var(--font-mono);
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .btn-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #818cf8;
+    transition: gap 0.2s ease;
+  }
+
+  .btn-card.btn-emerald {
+    color: #34d399;
+  }
+
+  .module-card:hover .btn-card {
+    gap: 12px;
+  }
+
+  .tech-tag {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--text-faint);
+  }
+
+  /* Tech Banner */
+  .tech-banner {
+    background: linear-gradient(180deg, rgba(31, 41, 55, 0.4) 0%, rgba(17, 24, 39, 0.6) 100%);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.5rem;
+  }
+
+  .tech-banner-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .tech-banner-title h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+  }
+
+  .tech-banner-title p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .stack-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .stack-pill {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .modules-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-title {
+      font-size: 2rem;
+    }
+  }
+</style>

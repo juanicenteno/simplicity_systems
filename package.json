@@ -1,0 +1,23 @@
+{
+  "name": "simplicity-systems",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Simplicity Systems - Modular Business & Hospitality Tools Hub",
+  "scripts": {
+    "dev": "astro dev --host",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.5.3",
+    "@astrojs/react": "^4.4.2",
+    "@react-pdf/renderer": "^4.3.2",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "astro": "^5.15.4",
+    "buffer": "^6.0.3",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  }
+}

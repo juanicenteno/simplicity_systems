@@ -1,0 +1,294 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "Simplicity Systems | Modular Suite", 
+  description = "Suite modular de soluciones para hotelería y gestión de negocios." 
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366F1'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
+  </head>
+  <body>
+    <!-- HEADER / NAVIGATION BAR -->
+    <header class="navbar">
+      <div class="nav-inner">
+        <a href="/" class="nav-brand">
+          <div class="logo-box">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">Simplicity</span>
+            <span class="brand-tag">SYSTEMS</span>
+          </div>
+        </a>
+
+        <nav class="nav-links">
+          <a href="/" class={currentPath === '/' ? 'active' : ''}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Inicio
+          </a>
+          <a href="/vouchers" class={currentPath.startsWith('/vouchers') ? 'active' : ''}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            Vouchers PDF
+          </a>
+          <a href="/reservas" class={currentPath.startsWith('/reservas') ? 'active' : ''}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Reservas
+          </a>
+        </nav>
+
+        <div class="nav-actions">
+          <span class="portfolio-badge">
+            <span class="pulse-dot"></span>
+            Portfolio Project
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN SLOT -->
+    <main class="main-wrapper">
+      <slot />
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-col">
+          <div class="footer-logo">
+            <span class="brand-title">Simplicity</span>
+            <span class="brand-tag">SYSTEMS</span>
+          </div>
+          <p class="footer-text">Módulos ligeros, eficientes e independientes para gestión operativa y comercial.</p>
+        </div>
+        <div class="footer-col">
+          <div class="footer-links">
+            <a href="/">Hub Principal</a>
+            <a href="/vouchers">Generador de Vouchers</a>
+            <a href="/reservas">Carga de Reservas</a>
+          </div>
+        </div>
+        <div class="footer-col" style="text-align: right;">
+          <p class="footer-copy">Diseñado para Portfolio & Soluciones B2B</p>
+          <p class="footer-subtext">Astro • React • Google Apps Script • React-PDF</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .nav-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-box {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  }
+
+  .brand-text {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .brand-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+  }
+
+  .brand-tag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #818cf8;
+    letter-spacing: 0.12em;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    padding: 4px 6px;
+    border-radius: 9999px;
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .nav-links a.active {
+    color: #ffffff;
+    background: var(--primary);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .portfolio-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #34d399;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
+    border-radius: 9999px;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  }
+
+  .main-wrapper {
+    min-height: calc(100vh - 160px);
+    padding: 2rem 1.5rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .footer {
+    background: #080b12;
+    border-top: 1px solid var(--border-subtle);
+    padding: 2.5rem 1.5rem;
+  }
+
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.5fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    margin-bottom: 6px;
+  }
+
+  .footer-text {
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    max-width: 320px;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .footer-links a {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover {
+    color: #ffffff;
+  }
+
+  .footer-copy {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .footer-subtext {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin-top: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .nav-inner {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-inner {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+    .footer-col:last-child {
+      text-align: left !important;
+    }
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/Layout.astro';
+import VoucherGenerator from '../components/VoucherGenerator.jsx';
+
+export const prerender = false;
+---
+
+<Layout title="Generador de Vouchers | Simplicity Systems" description="Crea, personaliza y genera comprobantes de reserva en PDF en tiempo real.">
+  <div class="module-view-header">
+    <div class="breadcrumb">
+      <a href="/">Hub</a>
+      <span>/</span>
+      <span class="active">Generador de Vouchers</span>
+    </div>
+  </div>
+
+  {/* Client-only React component for PDF live preview and generation */}
+  <VoucherGenerator client:only="react" />
+</Layout>
+
+<style>
+  .module-view-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: #ffffff;
+  }
+
+  .breadcrumb .active {
+    color: #a5b4fc;
+    font-weight: 600;
+  }
+</style>

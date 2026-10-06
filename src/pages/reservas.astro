@@ -1,0 +1,311 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/reservas.css';
+
+export const prerender = false;
+
+// URL configurada por defecto o por variable de entorno
+const DEFAULT_APPS_SCRIPT_URL = import.meta.env.PUBLIC_APPS_SCRIPT_URL || "";
+---
+
+<Layout title="Motor de Reservas | Simplicity Systems" description="Carga y registro de reservas integrado con Google Sheets y Apps Script.">
+  <div class="module-view-header">
+    <div class="breadcrumb">
+      <a href="/">Hub</a>
+      <span>/</span>
+      <span class="active">Motor de Reservas</span>
+    </div>
+  </div>
+
+  <div class="reservas-container">
+    <div class="reservas-card">
+      <header class="reservas-header">
+        <span class="reservas-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Módulo de Recepción & Check-in
+        </span>
+        <h2>Carga de Reservas</h2>
+        <p>Registra ingresos de huéspedes directamente en la base de datos operativa.</p>
+      </header>
+
+      <!-- BARRA DE MODO & INTEGRACIÓN -->
+      <div class="mode-bar">
+        <div class="mode-info">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="modeText">Modo: <strong>Simulación Demo (Portfolio)</strong></span>
+        </div>
+        <div class="mode-switch">
+          <button type="button" class="mode-btn active" id="btnModeDemo">Demo Mock</button>
+          <button type="button" class="mode-btn" id="btnModeLive">Google Sheet Live</button>
+        </div>
+      </div>
+
+      <div id="customEndpointBox" style="display: none; margin-bottom: 1.25rem; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <label class="form-label" style="margin-bottom: 4px;">URL de tu Google Apps Script Webhook:</label>
+        <input 
+          type="url" 
+          id="customScriptUrl" 
+          placeholder="https://script.google.com/macros/s/.../exec"
+          class="form-input"
+          style="font-size: 13px; font-family: monospace;"
+        />
+        <p style="font-size: 11px; color: #64748b; margin-top: 4px;">
+          Podés usar el script incluido en <code>scripts/google-apps-script.js</code> para vincular tu propia hoja de cálculo.
+        </p>
+      </div>
+
+      <!-- FORMULARIO -->
+      <form id="formReserva">
+        <div class="form-group">
+          <label for="titular" class="form-label">Titular de la reserva *</label>
+          <input
+            type="text"
+            id="titular"
+            placeholder="Ej: Pérez, Martín"
+            autocomplete="off"
+            class="form-input"
+            required
+          />
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label for="habitacion" class="form-label">Habitación / Unidad *</label>
+            <div class="select-wrap">
+              <select id="habitacion" class="form-select" required>
+                <option value="">- Seleccionar Unidad -</option>
+                {
+                  Array.from({ length: 20 }, (_, i) => i + 1).map((n) => (
+                    <option value={`Habitación ${n}`}>
+                      Habitación {n} {n <= 5 ? '(Standard)' : n <= 15 ? '(Superior)' : '(Suite)'}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pax" class="form-label">Huéspedes (Pax) *</label>
+            <div class="select-wrap">
+              <select id="pax" class="form-select">
+                <option value="1">1 Huésped</option>
+                <option value="2" selected>2 Huéspedes</option>
+                <option value="3">3 Huéspedes</option>
+                <option value="4">4 Huéspedes</option>
+                <option value="5+">5+ Huéspedes (Familiar)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label for="checkin" class="form-label">Check-in *</label>
+            <input type="date" id="checkin" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label for="checkout" class="form-label">Check-out *</label>
+            <input type="date" id="checkout" class="form-input" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="notas" class="form-label">Notas / Requerimientos Adicionales</label>
+          <input
+            type="text"
+            id="notas"
+            placeholder="Ej: Check-in tardío, cuna para bebé, cama matrimonial..."
+            class="form-input"
+          />
+        </div>
+
+        <button class="btn-submit" id="btnSubmit" type="button">
+          <div class="spinner" id="spinner"></div>
+          <svg id="btnIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path>
+          </svg>
+          <span id="btnText">Confirmar y Registrar Reserva</span>
+        </button>
+
+        <div class="toast" id="toast">
+          <svg id="toastIcon" viewBox="0 0 24 24"></svg>
+          <span id="toastMsg"></span>
+        </div>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  let currentMode: 'demo' | 'live' = 'demo';
+  let liveUrl = "";
+
+  const btnModeDemo = document.getElementById('btnModeDemo')!;
+  const btnModeLive = document.getElementById('btnModeLive')!;
+  const customEndpointBox = document.getElementById('customEndpointBox')!;
+  const customScriptUrl = document.getElementById('customScriptUrl') as HTMLInputElement;
+  const modeText = document.getElementById('modeText')!;
+  const statusDot = document.getElementById('statusDot')!;
+
+  const btn = document.getElementById('btnSubmit') as HTMLButtonElement;
+  const spinner = document.getElementById('spinner')!;
+  const btnIcon = document.getElementById('btnIcon')!;
+  const btnText = document.getElementById('btnText')!;
+  const toast = document.getElementById('toast')!;
+  const toastMsg = document.getElementById('toastMsg')!;
+  const toastIcon = document.getElementById('toastIcon')!;
+  const checkinEl = document.getElementById('checkin') as HTMLInputElement;
+  const checkoutEl = document.getElementById('checkout') as HTMLInputElement;
+
+  // Set default dates
+  const hoy = new Date().toISOString().split('T')[0];
+  checkinEl.min = hoy;
+  checkoutEl.min = hoy;
+
+  checkinEl.addEventListener('change', () => {
+    checkoutEl.min = checkinEl.value;
+    if (checkoutEl.value && checkoutEl.value < checkinEl.value) {
+      checkoutEl.value = '';
+    }
+  });
+
+  // Switch modes
+  btnModeDemo.addEventListener('click', () => {
+    currentMode = 'demo';
+    btnModeDemo.classList.add('active');
+    btnModeLive.classList.remove('active');
+    customEndpointBox.style.display = 'none';
+    modeText.innerHTML = 'Modo: <strong>Simulación Demo (Portfolio)</strong>';
+    statusDot.style.background = '#10b981';
+  });
+
+  btnModeLive.addEventListener('click', () => {
+    currentMode = 'live';
+    btnModeLive.classList.add('active');
+    btnModeDemo.classList.remove('active');
+    customEndpointBox.style.display = 'block';
+    modeText.innerHTML = 'Modo: <strong>Google Sheet Live (Apps Script)</strong>';
+    statusDot.style.background = '#6366f1';
+  });
+
+  function mostrarToast(tipo: 'success' | 'error', mensaje: string) {
+    toast.className = `toast ${tipo}`;
+    toastMsg.textContent = mensaje;
+    toastIcon.innerHTML =
+      tipo === 'success'
+        ? '<path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>'
+        : '<path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>';
+    toast.classList.add('show');
+  }
+
+  function setLoading(estado: boolean) {
+    btn.disabled = estado;
+    spinner.style.display = estado ? 'block' : 'none';
+    btnIcon.style.display = estado ? 'none' : 'block';
+    btnText.textContent = estado ? 'Procesando reserva...' : 'Confirmar y Registrar Reserva';
+  }
+
+  btn.addEventListener('click', async () => {
+    toast.className = 'toast';
+
+    const titular = (document.getElementById('titular') as HTMLInputElement).value.trim();
+    const habitacion = (document.getElementById('habitacion') as HTMLSelectElement).value;
+    const pax = (document.getElementById('pax') as HTMLSelectElement).value;
+    const checkin = checkinEl.value;
+    const checkout = checkoutEl.value;
+    const notas = (document.getElementById('notas') as HTMLInputElement).value.trim();
+
+    if (!titular || !habitacion || !checkin || !checkout) {
+      mostrarToast('error', 'Por favor completá todos los campos obligatorios (*).');
+      return;
+    }
+    if (checkout <= checkin) {
+      mostrarToast('error', 'La fecha de check-out debe ser posterior al check-in.');
+      return;
+    }
+
+    setLoading(true);
+
+    if (currentMode === 'demo') {
+      // SIMULACIÓN DEMO
+      await new Promise((r) => setTimeout(r, 700));
+      mostrarToast('success', `✓ [Demo] Reserva registrada con éxito: ${habitacion} — ${titular} (${pax} pax)`);
+      (document.getElementById('titular') as HTMLInputElement).value = '';
+      (document.getElementById('habitacion') as HTMLSelectElement).value = '';
+      checkinEl.value = '';
+      checkoutEl.value = '';
+      (document.getElementById('notas') as HTMLInputElement).value = '';
+      setLoading(false);
+      return;
+    }
+
+    // MODO LIVE
+    const targetUrl = customScriptUrl.value.trim();
+    if (!targetUrl) {
+      mostrarToast('error', 'Por favor ingresá la URL de tu Google Apps Script para el modo Live.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(targetUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          titular,
+          habitacion,
+          pax,
+          checkin,
+          checkout,
+          notas,
+          creadoEn: new Date().toISOString()
+        }),
+      });
+
+      const data = await res.json();
+      if (data.status === 'ok') {
+        mostrarToast('success', `✓ Reserva impactada en Google Sheet: ${habitacion} — ${titular}`);
+        (document.getElementById('titular') as HTMLInputElement).value = '';
+        (document.getElementById('habitacion') as HTMLSelectElement).value = '';
+        checkinEl.value = '';
+        checkoutEl.value = '';
+        (document.getElementById('notas') as HTMLInputElement).value = '';
+      } else {
+        mostrarToast('error', data.mensaje || 'Error al guardar la reserva en la hoja.');
+      }
+    } catch {
+      mostrarToast('error', 'No se pudo conectar con el endpoint de Google Apps Script. Verificá los permisos de despliegue.');
+    } finally {
+      setLoading(false);
+    }
+  });
+</script>
+
+<style>
+  .module-view-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .breadcrumb a {
+    color: var(--text-muted);
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: #ffffff;
+  }
+
+  .breadcrumb .active {
+    color: #34d399;
+    font-weight: 600;
+  }
+</style>
